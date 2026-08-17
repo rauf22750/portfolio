@@ -1,6 +1,29 @@
 {
   "sessions": [
     {
+      "id": "7d055f41-5ef6-41e0-a042-804286cf6f4f",
+      "started_at": "2026-08-17T11:07:00.670Z",
+      "updated_at": "2026-08-17T11:07:00.670Z",
+      "locale": "en",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+      "page_url": "https://abdulrauf22750.vercel.app/en",
+      "message_count": 1,
+      "preview": "hy",
+      "messages": [
+        {
+          "role": "user",
+          "content": "hy",
+          "created_at": "2026-08-17T11:07:00.670Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I can only discuss Abdul Rauf's professional background — skills, work experience, projects, education, CV, and contact details.\n\nTry asking:\n- What are your skills?\n- Tell me about your work experience\n- Which projects have you built?\n- How can I contact you?",
+          "created_at": "2026-08-17T11:07:00.670Z"
+        }
+      ],
+      "read": false
+    },
+    {
       "id": "8e60065f-4729-4a41-84a7-f668e6cba2b6",
       "started_at": "2026-07-19T04:54:53.501Z",
       "updated_at": "2026-07-19T04:55:20.642Z",
