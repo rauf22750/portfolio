@@ -1,10 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useLocale, useTranslations } from "next-intl";
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
-import { isRtlLocale } from "@/lib/locale-catalog";
 import { cn } from "@/lib/utils";
 
 const HeroProfileModelScene = dynamic(
@@ -20,103 +18,19 @@ type Props = {
 };
 
 const frameClass =
-  "relative h-[clamp(190px,22vw,290px)] w-[clamp(190px,22vw,290px)]";
+  "relative h-[200px] w-[200px] sm:h-[230px] sm:w-[230px] lg:h-[260px] lg:w-[260px]";
 
-function splitRingWords(text: string): string[] {
-  return text
-    .split("·")
-    .map((word) => word.trim())
-    .filter(Boolean);
-}
-
-function CodeOrbitRing({
-  text,
-  ring,
-  reverse,
-  duration,
-  rtl,
-  className,
-}: {
-  text: string;
-  ring: "outer" | "inner";
-  reverse?: boolean;
-  duration: string;
-  rtl?: boolean;
-  className?: string;
-}) {
-  const words = useMemo(() => {
-    const items = splitRingWords(text);
-    return items.length > 0 ? [...items, ...items] : items;
-  }, [text]);
-
-  if (words.length === 0) return null;
-
+function PortraitFrame({ children }: { children: ReactNode }) {
   return (
-    <div
-      className={cn(
-        "hero-portrait-code-orbit pointer-events-none absolute",
-        ring === "outer" ? "hero-portrait-code-orbit-outer" : "hero-portrait-code-orbit-inner",
-        reverse && "hero-portrait-code-orbit-reverse",
-        className,
-      )}
-      style={{ animationDuration: duration }}
-      dir={rtl ? "rtl" : "ltr"}
-      aria-hidden
-    >
-      {words.map((word, index) => (
-        <span
-          key={`${word}-${index}`}
-          className="hero-portrait-code-arm"
-          style={{ transform: `rotate(${(360 / words.length) * index}deg)` }}
-        >
-          <span className={cn("hero-portrait-code-label", rtl && "hero-portrait-code-label-ar")}>
-            {word}
-          </span>
-        </span>
-      ))}
-    </div>
-  );
-}
-
-function PortraitFrame({
-  children,
-  outerText,
-  innerText,
-  rtl,
-  className,
-}: {
-  children: ReactNode;
-  outerText: string;
-  innerText: string;
-  rtl?: boolean;
-  className?: string;
-}) {
-  return (
-    <div className={cn(frameClass, "relative isolate shrink-0", className)}>
+    <div className={cn(frameClass, "isolate shrink-0")}>
       <div
-        className="hero-portrait-galaxy-glow pointer-events-none absolute -inset-5 rounded-full opacity-60"
+        className="pointer-events-none absolute -inset-3 rounded-full bg-primary/5 blur-2xl"
         aria-hidden
       />
-
-      <div className="relative h-full w-full rounded-full">
-        <div className="absolute inset-[8px] z-[8] overflow-hidden rounded-full sm:inset-[9px]">
+      <div className="relative h-full w-full rounded-full border border-primary/15 bg-gradient-to-b from-primary/5 to-primary/10 p-1.5 shadow-[0_20px_50px_-30px_hsl(var(--primary)/0.2)]">
+        <div className="relative h-full w-full overflow-hidden rounded-full">
           {children}
         </div>
-        <CodeOrbitRing
-          text={outerText}
-          ring="outer"
-          duration="20s"
-          rtl={rtl}
-          className="z-10"
-        />
-        <CodeOrbitRing
-          text={innerText}
-          ring="inner"
-          reverse
-          duration="28s"
-          rtl={rtl}
-          className="z-10 opacity-90"
-        />
       </div>
     </div>
   );
@@ -125,22 +39,10 @@ function PortraitFrame({
 const portraitMediaClass =
   "mx-auto h-full w-full max-w-none origin-bottom scale-[1.14] object-contain object-bottom";
 
-function ImagePortrait({
-  src,
-  alt,
-  outerText,
-  innerText,
-  rtl,
-}: {
-  src: string;
-  alt: string;
-  outerText: string;
-  innerText: string;
-  rtl?: boolean;
-}) {
+function ImagePortrait({ src, alt }: { src: string; alt: string }) {
   return (
-    <PortraitFrame outerText={outerText} innerText={innerText} rtl={rtl}>
-      <img src={src} alt={alt} className={portraitMediaClass} />
+    <PortraitFrame>
+      <img src={src} alt={alt} className={portraitMediaClass} fetchPriority="high" decoding="async" />
     </PortraitFrame>
   );
 }
@@ -150,18 +52,10 @@ function PortraitCaption({ children }: { children: ReactNode }) {
 }
 
 export function HeroPortrait3D({ src, modelSrc, alt, className }: Props) {
-  const locale = useLocale();
-  const t = useTranslations("hero");
   const image = src?.trim() || "";
   const model = modelSrc?.trim() || "";
   const [modelReady, setModelReady] = useState(false);
   const [modelFailed, setModelFailed] = useState(false);
-  const isRtl = isRtlLocale(locale);
-  const ringText = {
-    outer: t("codeRingOuter"),
-    inner: t("codeRingInner"),
-  };
-
   const showModel = Boolean(model && !image && !modelFailed);
 
   useEffect(() => {
@@ -172,7 +66,7 @@ export function HeroPortrait3D({ src, modelSrc, alt, className }: Props) {
   if (showModel) {
     return (
       <div className={cn("flex flex-col items-center", className)}>
-        <PortraitFrame outerText={ringText.outer} innerText={ringText.inner} rtl={isRtl}>
+        <PortraitFrame>
           <div className="relative h-full w-full">
             {!modelReady ? (
               <div className="absolute inset-0 z-20 flex items-center justify-center">
@@ -197,9 +91,6 @@ export function HeroPortrait3D({ src, modelSrc, alt, className }: Props) {
         <ImagePortrait
           src={image}
           alt={alt}
-          outerText={ringText.outer}
-          innerText={ringText.inner}
-          rtl={isRtl}
         />
         <PortraitCaption>3D model failed — showing photo</PortraitCaption>
       </div>
@@ -213,9 +104,6 @@ export function HeroPortrait3D({ src, modelSrc, alt, className }: Props) {
       <ImagePortrait
         src={image}
         alt={alt}
-        outerText={ringText.outer}
-        innerText={ringText.inner}
-        rtl={isRtl}
       />
     </div>
   );

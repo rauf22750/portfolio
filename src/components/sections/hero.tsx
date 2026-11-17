@@ -59,11 +59,13 @@ export function Hero({ onChatOpen }: HeroProps) {
       <div className="relative z-10 mx-auto w-full max-w-[90rem] px-4 sm:px-6 lg:px-8 xl:px-10">
         <div
           className={cn(
-            "relative mx-auto flex w-full max-w-[76rem] animate-fade-in-up flex-col items-center gap-5 py-4 sm:gap-7 sm:py-8",
-            "lg:grid lg:min-h-[31rem] lg:items-center lg:gap-10 lg:overflow-visible lg:px-10 lg:py-10",
-            "xl:min-h-[33rem] xl:gap-14 xl:px-12",
+            "relative mx-auto flex w-full max-w-[62rem] animate-fade-in-up flex-col items-center gap-5 py-4 sm:gap-7 sm:py-8",
+            "lg:grid lg:items-center lg:gap-12 lg:overflow-visible lg:py-10",
+            "xl:gap-16",
             showPortrait
-              ? "lg:grid-cols-[minmax(17rem,0.78fr)_minmax(0,1.22fr)]"
+              ? isRtl
+                ? "lg:grid-cols-[minmax(0,1fr)_260px]"
+                : "lg:grid-cols-[260px_minmax(0,1fr)]"
               : "lg:grid-cols-1",
           )}
         >
@@ -123,11 +125,11 @@ export function Hero({ onChatOpen }: HeroProps) {
               {site.bio}
             </p>
 
-            <div className="mt-6 space-y-3 sm:mt-8 lg:mt-9">
+            <div className="mt-6 space-y-3 sm:mt-8 lg:mt-7">
               <div
                 className={cn(
                   "flex flex-col gap-3 sm:flex-row",
-                  isRtl ? "sm:justify-end" : "sm:justify-start",
+                  isRtl ? "sm:justify-center lg:justify-end" : "sm:justify-center lg:justify-start",
                 )}
               >
                 {onChatOpen ? (
